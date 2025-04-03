@@ -30,13 +30,13 @@ CREATE TABLE Address (
     FOREIGN KEY (CountryID) REFERENCES Country(CountryID)
 );
 
--- Customer Table (with encrypted password column)
+-- Customer Table (with encrypted EncryptedPassword column)
 CREATE TABLE Customer (
     CustomerID INT PRIMARY KEY,
     FirstName VARCHAR(100),
     LastName VARCHAR(100),
     CustomerName VARCHAR(100),
-    Password VARBINARY(255),
+    EncryptedPassword VARBINARY(255),
     Email VARCHAR(255),
     PhoneNumber VARCHAR(20),
     RegistrationDate DATETIME
