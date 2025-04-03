@@ -1,10 +1,8 @@
 -- ========================================
--- 01_DDL.sql - Table Creation Script for SQL Server
+-- DDL.sql - Table Creation Script for SQL Server
+-- Team: 3
+-- E-Commerce Database Management System
 -- ========================================
-
--- Create Database (Optional)
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'E_Commerce_Database_Management_System')
-    CREATE DATABASE E_Commerce_Database_Management_System;
 
 CREATE DATABASE E_Commerce_Database_Management_System;
 USE E_Commerce_Database_Management_System;
@@ -209,23 +207,3 @@ CREATE TABLE CustomerSupportTicket (
     FOREIGN KEY (TicketStatusID) REFERENCES TicketStatus(TicketStatusID)
 );
 
----
-DROP TABLE IF EXISTS CustomerSupportTicket;
-DROP TABLE IF EXISTS TicketStatus;
-DROP TABLE IF EXISTS Review;
-DROP TABLE IF EXISTS OrderLine;
-DROP TABLE IF EXISTS CouponCategory;
-DROP TABLE IF EXISTS Coupon;
-DROP TABLE IF EXISTS ShopOrder;
-DROP TABLE IF EXISTS OrderStatus;
-DROP TABLE IF EXISTS ShippingMethod;
-DROP TABLE IF EXISTS PaymentMethod;
-DROP TABLE IF EXISTS PaymentType;
-DROP TABLE IF EXISTS ShoppingCartItem;
-DROP TABLE IF EXISTS ShoppingCart;
-DROP TABLE IF EXISTS ProductItem;
-DROP TABLE IF EXISTS Product;
-DROP TABLE IF EXISTS Category;
-DROP TABLE IF EXISTS UserAddress;
-DROP TABLE IF EXISTS Address;
-DROP TABLE IF EXISTS Country;

@@ -131,7 +131,7 @@ SELECT * FROM CustomerSupportDashboard ORDER BY CreatedDate DESC;
  * View: CustomerPublicInfo
  * This view provides limited customer data to departments that need basic information 
  * but shouldn't have access to sensitive details like phone numbers or address information. 
- * Instead of granting access to the full Customer table, you can grant access to this view.
+ * Instead of granting access to the full Customer table, the system can grant access to this view.
  */
 CREATE VIEW CustomerPublicInfo AS
 SELECT 
