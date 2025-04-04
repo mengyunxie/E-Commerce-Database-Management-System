@@ -13,7 +13,7 @@ USE E_Commerce_Database_Management_System;
  * Must have at least one character before the @
  * Must have at least one character between @ and .
  * Must have at least one . after the @ symbol
- * Must have at least two characters after the last . (TLD)
+ * Must have at least two characters after the last .
  * Cannot contain consecutive dots (..)
  * Cannot have whitespace
  */
