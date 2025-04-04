@@ -4,8 +4,8 @@
 -- E-Commerce Database Management System
 -- ========================================
 
-CREATE DATABASE E_Commerce_Database_Management_System;
-USE E_Commerce_Database_Management_System;
+CREATE DATABASE E_COMMERCE;
+USE E_COMMERCE;
 
 
 -- Country Table

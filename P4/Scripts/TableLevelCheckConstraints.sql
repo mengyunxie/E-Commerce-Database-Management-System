@@ -1,10 +1,10 @@
 -- ========================================
--- TableLevelCheckConstraints.sql - Apply table constraints
+-- TableLevelCheckConstraints.sql - Table-level CHECK Constraints based on functions
 -- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 
-USE E_Commerce_Database_Management_System;
+USE E_COMMERCE;
 
 /*
  * Validate Email Format

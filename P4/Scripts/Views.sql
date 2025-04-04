@@ -1,4 +1,10 @@
+-- ========================================
+-- Views.sql - Data Insert Script for SQL Server
+-- Team: 3
+-- E-Commerce Database Management System
+-- ========================================
 
+USE E_COMMERCE;
 
 /*
  * View: CustomerPurchaseHistory
@@ -58,7 +64,6 @@ SELECT * FROM ProductSalesPerformance ORDER BY AverageRating DESC;
 
 
 
-
 /*
  * View: OrderFulfillmentStatus
  * Warehouse and shipping teams use this view to manage order fulfillment priorities 
@@ -89,7 +94,6 @@ GROUP BY o.OrderID, o.OrderDate, c.FirstName, c.LastName, os.Status,
 
 -- Usage OrderFulfillmentStatus View
 SELECT * FROM OrderFulfillmentStatus ORDER BY OrderValue DESC;
-
 
 
 
@@ -126,7 +130,6 @@ SELECT * FROM CustomerSupportDashboard ORDER BY CreatedDate DESC;
 
 
 
-
 /*
  * View: CustomerPublicInfo
  * This view provides limited customer data to departments that need basic information 
@@ -144,7 +147,6 @@ FROM Customer;
 
 -- Usage CustomerPublicInfo View
 SELECT * FROM CustomerPublicInfo ORDER BY CustomerID DESC;
-
 
 
 

@@ -1,4 +1,10 @@
-USE E_COMMERCE;;
+-- ========================================
+-- ComputedColumnFunctions.sql - Computed Columns based on functions
+-- Team: 3
+-- E-Commerce Database Management System
+-- ========================================
+
+USE E_COMMERCE;
 
 -- Function: Get the full name of a customer
 CREATE FUNCTION dbo.GetCustomerFullName (@CustomerID INT)
