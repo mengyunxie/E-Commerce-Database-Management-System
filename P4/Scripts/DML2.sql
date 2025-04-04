@@ -72,6 +72,10 @@ INSERT INTO Customer (
 (1014, 'Devon', 'Watson', 'fdixon', EncryptByKey(Key_GUID('TestSymmetricKey'), CONVERT(VARBINARY, '6TLHAq&W+xgv')), 'devon.watson@hotmail.com', '(718) 235-5065', '2020-10-19 20:30:23'),
 (1015, 'Jonathan', 'Maldonado', 'denisetaylor', EncryptByKey(Key_GUID('TestSymmetricKey'), CONVERT(VARBINARY, '0%m4yEb_62(b')), 'jonathan.maldonado@gmail.com', '(701) 952-8928', '2021-01-25 20:17:39');
 
+-- After inserting all Customers data, close the symmetric key
+CLOSE SYMMETRIC KEY TestSymmetricKey;
+
+
 --Insert 22 Address
 INSERT INTO Address (
     AddressID, UnitNumber, StreetNumber, AddressLine1, AddressLine2, City, State, PostalCode, CountryID
