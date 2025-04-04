@@ -1,43 +1,54 @@
 -- ========================================
--- Trigger.sql - Trigger Script for updating order totals
+-- Trigger.sql - Trigger Script
 -- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 
 USE E_COMMERCE;
 
-CREATE TRIGGER trg_UpdateOrderTotal 
-ON OrderLine 
-AFTER INSERT, UPDATE, DELETE AS 
+
+/*
+ * Trigger for OrderLine to calculate price when inserted or updated
+ */
+CREATE TRIGGER trg_OrderLine_CalculatePrice
+ON OrderLine
+AFTER INSERT, UPDATE
+AS
 BEGIN
     SET NOCOUNT ON;
     
-    BEGIN TRY
-        -- Temporary table to store affected OrderIDs
-        DECLARE @AffectedOrders TABLE (OrderID INT);
-        
-        -- Collect affected OrderIDs from inserted and deleted rows
-        INSERT INTO @AffectedOrders (OrderID)
-        SELECT DISTINCT OrderID FROM inserted
-        UNION
-        SELECT DISTINCT OrderID FROM deleted
-        WHERE OrderID IS NOT NULL;
-        
-        -- Update OrderTotal in ShopOrder for affected orders
-        UPDATE so
-        SET OrderTotal = (
-            SELECT COALESCE(SUM(ol.Quantity * ol.Price * 
-                   (1 - COALESCE(c.DiscountRate, 0))), 0)
-            FROM OrderLine ol
-            LEFT JOIN Coupon c ON ol.CouponID = c.CouponID
-                AND CAST(GETDATE() AS DATE) BETWEEN c.StartDate AND c.EndDate
-            WHERE ol.OrderID = so.OrderID
-        )
-        FROM ShopOrder so
-        WHERE so.OrderID IN (SELECT OrderID FROM @AffectedOrders);
-    END TRY
-    BEGIN CATCH
-        PRINT 'Error for updating order totals'
-        THROW;
-    END CATCH
+    -- Update the Price field in OrderLine based on ProductItem price, discount, and quantity
+    UPDATE ol
+    SET ol.Price = pi.Price * (1 - ISNULL(c.DiscountRate, 0)/100) * ol.Quantity
+    FROM OrderLine ol
+    INNER JOIN inserted i ON ol.OrderLineID = i.OrderLineID
+    INNER JOIN ProductItem pi ON ol.ProductItemID = pi.ProductItemID
+    LEFT JOIN Coupon c ON ol.CouponID = c.CouponID;
+    
+    -- Now update the corresponding ShopOrder total
+    UPDATE so
+    SET so.OrderTotal = (SELECT SUM(ol.Price) FROM OrderLine ol WHERE ol.OrderID = so.OrderID) + 
+                        (SELECT sm.Price FROM ShippingMethod sm WHERE sm.ShippingMethodID = so.ShippingMethodID)
+    FROM ShopOrder so
+    INNER JOIN inserted i ON so.OrderID = i.OrderID;
 END;
+
+
+/*
+ * Trigger for OrderLine when items are deleted
+ */
+CREATE TRIGGER trg_OrderLine_Delete
+ON OrderLine
+AFTER DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Update the ShopOrder total when OrderLine items are deleted
+    UPDATE so
+    SET so.OrderTotal = (SELECT ISNULL(SUM(ol.Price), 0) FROM OrderLine ol WHERE ol.OrderID = so.OrderID) + 
+                        (SELECT sm.Price FROM ShippingMethod sm WHERE sm.ShippingMethodID = so.ShippingMethodID)
+    FROM ShopOrder so
+    INNER JOIN deleted d ON so.OrderID = d.OrderID;
+END;
+

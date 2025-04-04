@@ -6,6 +6,8 @@
 
 USE E_COMMERCE;
 
+
+
 /*
  * View: CustomerPurchaseHistory
  * This helps customer service representatives quickly view a customer's complete purchase history 
@@ -22,14 +24,17 @@ SELECT
     p.ProductName,
     pi.SKU,
     ol.Quantity,
-    ol.Price AS UnitPrice,
-    (ol.Quantity * ol.Price) AS LineTotal
+    -- Recalculate UnitPrice as per design (ProductItem.Price * (1 - DiscountRate))
+    (pi.Price * (1 - ISNULL(cpn.DiscountRate, 0)/100.0)) AS UnitPrice,
+    -- LineTotal = UnitPrice * Quantity
+    (ol.Quantity * pi.Price * (1 - ISNULL(cpn.DiscountRate, 0)/100.0)) AS LineTotal
 FROM Customer c
 JOIN ShopOrder o ON c.CustomerID = o.CustomerID
 JOIN OrderStatus os ON o.OrderStatusID = os.OrderStatusID
 JOIN OrderLine ol ON o.OrderID = ol.OrderID
 JOIN ProductItem pi ON ol.ProductItemID = pi.ProductItemID
-JOIN Product p ON pi.ProductID = p.ProductID;
+JOIN Product p ON pi.ProductID = p.ProductID
+LEFT JOIN Coupon cpn ON ol.CouponID = cpn.CouponID;
 
 -- Usage CustomerPurchaseHistory View
 SELECT * FROM CustomerPurchaseHistory ORDER BY CustomerID, OrderDate DESC;
@@ -48,7 +53,8 @@ SELECT
     c.CategoryName,
     COUNT(DISTINCT o.OrderID) AS NumberOfOrders,
     SUM(ol.Quantity) AS TotalQuantitySold,
-    SUM(ol.Quantity * ol.Price) AS Revenue,
+    -- Revenue calculated using current logic
+    SUM(ol.Quantity * pi.Price * (1 - ISNULL(cpn.DiscountRate, 0)/100.0)) AS Revenue,
     AVG(r.Rating) AS AverageRating,
     COUNT(r.ReviewID) AS NumberOfReviews
 FROM Product p
@@ -56,12 +62,48 @@ JOIN Category c ON p.CategoryID = c.CategoryID
 JOIN ProductItem pi ON p.ProductID = pi.ProductID
 LEFT JOIN OrderLine ol ON pi.ProductItemID = ol.ProductItemID
 LEFT JOIN ShopOrder o ON ol.OrderID = o.OrderID
+LEFT JOIN Coupon cpn ON ol.CouponID = cpn.CouponID
 LEFT JOIN Review r ON ol.OrderLineID = r.OrderLineID
 GROUP BY p.ProductID, p.ProductName, c.CategoryName;
 
 -- Usage ProductSalesPerformance View
 SELECT * FROM ProductSalesPerformance ORDER BY AverageRating DESC;
 
+
+
+/*
+ * View: ProductInventorySalesStatus
+ * Current inventory (StockQuantity) 
+ * Quantity sold this month
+ * Quantity sold this year
+ */
+CREATE VIEW ProductInventorySalesStatus AS
+SELECT 
+    p.ProductID,
+    p.ProductName,
+    pi.SKU,
+    pi.StockQuantity AS CurrentInventory,
+    -- Quantity sold this month
+    ISNULL(SUM(CASE 
+        WHEN MONTH(o.OrderDate) = MONTH(GETDATE()) AND YEAR(o.OrderDate) = YEAR(GETDATE())
+        THEN ol.Quantity 
+        ELSE 0 
+    END), 0) AS QuantitySoldThisMonth,
+    -- Quantity sold this year
+    ISNULL(SUM(CASE 
+        WHEN YEAR(o.OrderDate) = YEAR(GETDATE()) 
+        THEN ol.Quantity 
+        ELSE 0 
+    END), 0) AS QuantitySoldThisYear
+FROM Product p
+JOIN ProductItem pi ON p.ProductID = pi.ProductID
+LEFT JOIN OrderLine ol ON pi.ProductItemID = ol.ProductItemID
+LEFT JOIN ShopOrder o ON ol.OrderID = o.OrderID
+GROUP BY 
+    p.ProductID, p.ProductName, pi.SKU, pi.StockQuantity;
+
+-- Usage ProductInventorySalesStatus View
+SELECT * FROM ProductInventorySalesStatus ORDER BY CurrentInventory DESC;
 
 
 /*
@@ -80,7 +122,8 @@ SELECT
     CONCAT(a.AddressLine1, ', ', a.City, ', ', a.State, ' ', a.PostalCode) AS ShippingAddress,
     sm.ShippingMethodName,
     SUM(ol.Quantity) AS TotalItems,
-    o.OrderTotal AS OrderValue,
+    -- Recalculate OrderValue based on current logic
+    SUM(ol.Quantity * pi.Price * (1 - ISNULL(cpn.DiscountRate, 0)/100.0)) + sm.Price AS OrderValue,
     DATEDIFF(day, o.OrderDate, GETDATE()) AS DaysSinceOrder
 FROM ShopOrder o
 JOIN Customer c ON o.CustomerID = c.CustomerID
@@ -88,9 +131,12 @@ JOIN OrderStatus os ON o.OrderStatusID = os.OrderStatusID
 JOIN Address a ON o.AddressID = a.AddressID
 JOIN ShippingMethod sm ON o.ShippingMethodID = sm.ShippingMethodID
 JOIN OrderLine ol ON o.OrderID = ol.OrderID
-GROUP BY o.OrderID, o.OrderDate, c.FirstName, c.LastName, os.Status, 
-         a.AddressLine1, a.City, a.State, a.PostalCode, sm.ShippingMethodName, 
-         o.OrderTotal;
+JOIN ProductItem pi ON ol.ProductItemID = pi.ProductItemID
+LEFT JOIN Coupon cpn ON ol.CouponID = cpn.CouponID
+GROUP BY 
+    o.OrderID, o.OrderDate, c.FirstName, c.LastName, os.Status, 
+    a.AddressLine1, a.City, a.State, a.PostalCode, 
+    sm.ShippingMethodName, sm.Price;
 
 -- Usage OrderFulfillmentStatus View
 SELECT * FROM OrderFulfillmentStatus ORDER BY OrderValue DESC;
