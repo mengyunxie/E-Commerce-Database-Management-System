@@ -19,7 +19,7 @@ BEGIN
 
     RETURN @FullName;
 END;
--- test:
+-- Use Case:
 SELECT dbo.GetCustomerFullName(1001) AS FullName;
 
 -- Function: Formatted a Customer's Address to (AddressLine1, City, State, PostalCode)
@@ -37,12 +37,12 @@ BEGIN
 
     RETURN @FormattedAddress;
 END;
---test1:
+--Use Case 1:
 SELECT 
     CustomerID,
     dbo.GetCustomerFormattedAddress(CustomerID) AS DefaultAddress
 FROM Customer;
---test2:
+--Use Case 2:
 SELECT dbo.GetCustomerFormattedAddress(1001) AS FULLAddress;
 
 
@@ -59,7 +59,7 @@ BEGIN
 
     RETURN ISNULL(@TotalStock, 0);  -- return 0 if no matching items
 END;
--- test:
+-- Use Case:
 SELECT dbo.GetTotalStock(2001) AS TotalStock;
 
 -- Function: Get stock status (like “Low Stock”, “Out of Stock”)
@@ -82,7 +82,7 @@ BEGIN
             ELSE 'In Stock'
         END;
 END;
--- test:
+-- Use Case:
 SELECT 
     P.ProductID,
     P.ProductName,
@@ -106,7 +106,7 @@ RETURN
     GROUP BY P.ProductID, P.ProductName
     ORDER BY TotalSold DESC
 );
--- test:
+-- Use Case:
 SELECT * FROM dbo.GetTop5BestSellers();
 
 -- Calculates the Grand Total for a given OrderID, applying any coupon discounts on individual order lines if applicable
@@ -126,7 +126,7 @@ BEGIN
 
     RETURN ISNULL(@Total, 0);
 END;
---test:
+--Use Case:
 SELECT dbo.GetOrderGrandTotal(5000) AS GrandTotal;
 
 -- Get all unsolved ticket
@@ -147,7 +147,7 @@ RETURN
     JOIN Customer C ON CST.CustomerID = C.CustomerID
     WHERE TS.Status NOT IN ('Cancelled', 'Closed', 'Invalid')
 );
---test:
+--Use Case:
 SELECT * FROM dbo.GetUnsolvedTickets();
 
 
