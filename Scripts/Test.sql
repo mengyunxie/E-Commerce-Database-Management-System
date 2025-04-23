@@ -1,6 +1,5 @@
 -- ========================================
 -- Test.sql - Test Scripts
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

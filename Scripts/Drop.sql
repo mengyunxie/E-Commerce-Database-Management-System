@@ -1,6 +1,5 @@
 -- ========================================
 -- Drop.sql - Drop Script
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

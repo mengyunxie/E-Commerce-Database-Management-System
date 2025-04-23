@@ -1,6 +1,5 @@
 -- ========================================
 -- ColumnDataEncryption.sql - Column Data Encryption
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

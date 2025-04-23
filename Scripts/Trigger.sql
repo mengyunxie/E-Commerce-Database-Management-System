@@ -1,6 +1,5 @@
 -- ========================================
 -- Trigger.sql - Trigger Script
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

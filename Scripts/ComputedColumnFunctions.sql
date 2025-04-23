@@ -1,6 +1,5 @@
 -- ========================================
 -- ComputedColumnFunctions.sql - Computed Columns based on functions
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

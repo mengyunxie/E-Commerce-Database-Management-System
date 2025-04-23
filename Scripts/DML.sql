@@ -1,6 +1,5 @@
 -- ========================================
 -- DML.sql - Data Insert Script for SQL Server
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

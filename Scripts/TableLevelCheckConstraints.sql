@@ -1,6 +1,5 @@
 -- ========================================
 -- TableLevelCheckConstraints.sql - Table-level CHECK Constraints based on functions
--- Team: 3
 -- E-Commerce Database Management System
 -- ========================================
 

@@ -30,38 +30,6 @@
 
 
 
-## Data Visualizations
-
-Interactive dashboards and reports built in **Tableau** provide insights into:
-
-- **Sales Dashboard** – Visualize revenue, growth trends, and seasonal spikes
-
-  <img src="./Visualization/SalesDashboard.png" alt="Sales by Category" style="zoom:50%;" />
-
-- **Customer Insights** – Understand customer behavior, lifetime value, and retention
-
-  <img src="./Visualization/CustomerInsights.png" alt="CustomerInsights" style="zoom:70%;" />
-
-- **Coupon Discount Impact** – Analyze the effectiveness of discounts and marketing campaigns
-
-  <img src="./Visualization/CouponDiscountImpact.png" alt="CouponDiscountImpact" style="zoom:30%;" />
-
-- **Customer Support Dashboard** – Monitor ticket resolution, volume, and performance
-
-  <img src="./Visualization/CustomerSupportDashboard.png" alt="CustomerSupportDashboard" style="zoom:40%;" />
-
-- **Inventory Dashboard** – Track low stock, stockouts, and product movement
-
-  <img src="./Visualization/Inventory.png" alt="Inventory" style="zoom:50%;" />
-
-- **Product Rating Dashboard** – Aggregate review metrics to improve offerings
-
-  <img src="./Visualization/ProductRatingsDashboard.png" alt="ProductRatingsDashboard" style="zoom:30%;" />
-
-
-
-
-
 ## Architecture
 
 - **Backend**: SQL Server  
@@ -95,6 +63,38 @@ Interactive dashboards and reports built in **Tableau** provide insights into:
 The system includes a comprehensive ERD showing all 20 entities and their relationships:
 
 ![ERD](./Visualization/ERD.png)
+
+
+
+
+
+## Data Visualizations
+
+Interactive dashboards and reports built in **Tableau** provide insights into:
+
+- **Sales Dashboard** – Visualize revenue, growth trends, and seasonal spikes
+
+  <img src="./Visualization/SalesDashboard.png" alt="Sales by Category" style="zoom:50%;" />
+
+- **Customer Insights** – Understand customer behavior, lifetime value, and retention
+
+  <img src="./Visualization/CustomerInsights.png" alt="CustomerInsights" style="zoom:70%;" />
+
+- **Coupon Discount Impact** – Analyze the effectiveness of discounts and marketing campaigns
+
+  <img src="./Visualization/CouponDiscountImpact.png" alt="CouponDiscountImpact" style="zoom:30%;" />
+
+- **Customer Support Dashboard** – Monitor ticket resolution, volume, and performance
+
+  <img src="./Visualization/CustomerSupportDashboard.png" alt="CustomerSupportDashboard" style="zoom:40%;" />
+
+- **Inventory Dashboard** – Track low stock, stockouts, and product movement
+
+  <img src="./Visualization/Inventory.png" alt="Inventory" style="zoom:50%;" />
+
+- **Product Rating Dashboard** – Aggregate review metrics to improve offerings
+
+  <img src="./Visualization/ProductRatingsDashboard.png" alt="ProductRatingsDashboard" style="zoom:30%;" />
 
 
 
